@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+
+	{% if id_filtro == '1' %}
+		<h5><strong>Tienes {{mensajes.count}} mensaje(s)</strong></h5>
+	{% elif id_filtro == '2' %}
+		{% if mensajes.count > 0 %}
+			<h5><strong>Tienes {{mensajes.count}} mensaje(s) sin leer</strong></h5>
+		{% else %}
+			<h5><strong>No hay mensajes nuevos</strong></h5>
+		{% endif %}
+	{% elif id_filtro == '3' %}
+		{% if mensajes.count > 0 %}
+			<h5><strong>Tienes {{mensajes.count}} mensaje(s) leidos</strong></h5>
+		{% else %}
+			<h5><strong>No hay mensajes nuevos</strong></h5>
+		{% endif %}
+	{% endif %}
+	<nav class="menu">
+		<a href="{% url main.views.mensaje_mostrar 1 %}">Todo</a>
+		<a href="{% url main.views.mensaje_mostrar 2 %}">Sin Leer</a>
+		<a href="{% url main.views.mensaje_mostrar 3 %}">Leidos</a>
+		<!--<a href="#">Enviados</a>-->
+	</nav>
+	<table class="cnt-mensajes">
+		{% for mensaje in mensajes %}
+			{% if mensaje.fl_revisado == 1 %}
+				<tr class="mensajes leido">
+			{% else %}
+				<tr class="mensajes sin-leer">
+			{% endif %}
+				{% for group in request.user.groups.all %}
+					
+					{% if group.pk = 1 %}
+						<td class="remitente"><a href="{% url main.views.mensaje_leer_id mensaje.pk %}" class="cortar-remitente">{{mensaje.remitente.empresa|title|truncatewords:10}}</a></td>
+					{% elif group.pk = 2 %}
+						<td class="remitente"><a href="{% url main.views.mensaje_leer_id mensaje.pk %}" class="cortar-remitente">{{mensaje.remitente.postulante.get_nombre_completo|title}}</a></td>
+					{% endif %}
+					
+				{% endfor %}
+				<td class="asunto"><span class="cortar-asunto">{{mensaje.de_asunto}} - {{mensaje.de_mensaje}}</span></td>
+				<td class="fechamensaje">{{mensaje.fe_creacion|date:'d/M'}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block empleos_destacados %}
+	<form id="form-crear" method="post" action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<p><input type='submit' value='Aceptar' /></p>
+	</form>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

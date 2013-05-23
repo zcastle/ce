@@ -1,0 +1,42 @@
+<!--<div class="column col-avanzado borde-redondo">
+	<h5>Departamento</h5>
+	<hr />
+	<ul class="square">	
+		<li><a href="">Lima</a> <strong>(10)</strong></li>
+	</ul>
+	<hr />
+	<div class="ver-mas"><a href="">Ver mas</a></div>
+</div>
+<div class="column col-avanzado borde-redondo">
+	<h5>Distrito</h5>
+	<hr />
+	<ul class="square">
+		<li><a href="">Cercado</a> <strong>(10)</strong></li>
+	</ul>
+	<hr />
+	<div class="ver-mas"><a href="">Ver mas</a></div>
+</div>
+<div class="column col-avanzado borde-redondo">
+	<h5>Área</h5>
+	<hr />
+	<ul class="square">
+		<li><a href="">Sistemas</a> <strong>(10)</strong></li>
+	</ul>
+	<hr />
+	<div class="ver-mas"><a href="">Ver mas</a></div>
+</div>-->
+<style type="text/css">
+	form#frmBusquedaAvanzada select {
+		width: 100%;
+		font-size: 1.1em;
+	}
+	form#frmBusquedaAvanzada input[type=submit] {
+		float: right;
+	}
+</style>
+<div class="column col-avanzado-2 borde-redondo">
+	<form id="frmBusquedaAvanzada" method="post" action='#'>{% csrf_token %}
+		{{formularioBA.as_p}}
+		<input type='submit' value='Buscar' id="btnBusquedaAvanzada" />
+	</form>
+</div>

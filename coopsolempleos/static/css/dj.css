@@ -1,0 +1,94 @@
+/*form#form-crear ul.errorlist {color: #f00; float: right;}*/
+form#form-crear, form#form-ingresar, form#form-crear-estudio {margin-top: 10px;}
+form#form-crear p label {position: relative; float: left; width: 190px;}
+form#form-notificaciones p label {position: relative; float: left; width: 280px;}
+
+form#form-crear p input[id='id_email'],
+form#form-crear p input[id='id_no_institucion'],
+form#form-crear p input[id='id_no_carrera'],
+form#form-crear p input[id='id_no_empresa'],
+form#form-crear p input[id='id_no_cargo'],
+form#form-crear p input[id='id_no_referencia'],
+form#form-crear p input[id='id_no_referencia_cargo'],
+form#form-crear p input[id='id_no_razon_social'],
+form#form-crear p input[id='id_no_empleo'],
+form#form-crear p input[id='id_no_comercial'],
+form#form-crear p input[id='id_no_postulante'],
+form#form-crear p input[id='id_ap_postulante'],
+form#form-crear p input[id='id_am_postulante'],
+form#form-crear p textarea[id='id_de_direccion'],
+form#form-crear p textarea[id='id_de_sobremi'],
+form#form-crear p textarea[id='id_de_funciones'],
+form#form-crear p textarea[id='id_de_logros'],
+form#form-crear p input[id='id_de_asunto'],
+form#form-crear p input[id='id_institucion'],
+form#form-crear p input[id='id_carrera'],
+form#form-crear p input[id='id_programa'],
+form#form-crear p textarea[id='id_de_mensaje'],
+form#form-crear p textarea[id='id_de_empleo'],
+form#form-crear p textarea[id='id_de_requisitos'],
+form#form-crear p input[id='id_no_web'],
+form#form-crear p input[id='id_no_contacto'] {width: 400px;}
+
+form#form-crear p select[id='id_institucion'],
+form#form-crear p select[id='id_carrera'] {width: 410px; font-size: 1.2em;}
+
+form#form-crear p textarea {height: 100px;}
+
+form p input[type=submit] {float: right;}
+/*form#form-notificaciones p input[type=submit] {float: right;}*/
+
+form#form-crear .helptext {display: block;}
+/*input[type="file"] {opacity: 0;}*/
+
+
+form#form-crear p {margin: 0 0 11px 0;}
+form#form-notificaciones p {margin: 0 0 11px 0;}
+
+div.form-dialog, div.form-dialog-right, .line_v {position: relative; float: left; margin-left: 20px; margin-top: 15px;}
+div.form-dialog-right, .line_v {margin-left: 40px;}
+div.form-dialog p {margin-bottom: 0;}
+div.form-dialog p input[type='text'],
+div.form-dialog p input[type='password'] {min-width: 250px; width: 350px; font-size: 19px;}
+div.form-dialog-right h4 {text-align: center;}
+div.form-dialog-right input {width: 200px; font-size: 15px;}
+/*div.form-dialog form#form-ingresar ul.errorlist {color: #f00; margin-bottom: 5px;}*/
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}
+.errorlist li {
+    /*background-color: red;*/
+    color: #f00;
+    display: block;
+    font-size: 1.2em;
+    margin: 0 0 3px;
+    padding: 4px 5px;
+}
+
+div.form-dialog a.rcd {float: right; margin-top: 10px;}
+
+.line_v {border-left: 1px solid #ccc; height: 235px;}
+
+form.form-registro p {margin-bottom: 0;}
+form.form-registro p input[type='text'],
+form.form-registro p input[type='password'] {min-width: 195px; width: 195px; font-size: 17px;}
+
+form.form-crear-estudio p {margin-bottom: 0;}
+form.form-crear-estudio p input[type='text'] {min-width: 195px; width: 195px; font-size: 17px;}
+
+a.link {color: #369;}
+
+
+/*#id_fe_periodo_fin {float: left;}*/
+#id_fe_periodo_fin:disabled {background-color: #ccc;}
+
+
+/*JQUERY UI*/
+
+.ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {float: left;}
+/*.ui-datepicker-div .ui-widget-header {border: 1px solid #369; background: #369; color: #fff; font-weight: bold;}*/
+/*a.ui-datepicker-prev, a.ui-datepicker-next {display: none;}*/
+
+#id_fl_Sexo_0 {float: left;}

@@ -1,0 +1,28 @@
+<hr />
+<div class="resultado">
+
+	{% ifequal empleo.user.empresa.im_logo '' %}
+		<div class="resultado imagen"><img src="{{STATIC_URL}}images/empresa.png"></div>
+	{% else %}
+		<div class="resultado imagen"><img src="{{MEDIA_URL}}{{empleo.user.empresa.im_logo}}"></div>
+	{% endifequal %}
+
+	<!--<div class="resultado imagen"><img src="{{MEDIA_URL}}{{empleo.user.empresa.im_logo}}"></div>-->
+
+	<div class="resultado oferta"><h5><a class="link" href="{% url main.views.empleo_id empleo.id %}">{{empleo.no_empleo}}</a></h5></div>
+
+	{% if empleo.user.empresa.no_comercial %}
+		<div class="resultado empresa"><a href="{% url main.views.listar_por_empresas empleo.user.id %}">{{empleo.user.empresa.no_comercial}}</a></div>
+	{% else %}
+		<div class="resultado empresa"><a href="{% url main.views.listar_por_empresas empleo.user.id %}">{{empleo.user.empresa.no_razon_social}}</a></div>
+	{% endif %}
+
+	<div class="resultado direccion">
+		{{empleo.ubigeo.name|title}} - 
+		{{empleo.tipoempleo.no_tipo_empleo|title}}
+	</div>
+	<div class="resultado tiempo">
+		<!--Creado el {{empleo.fe_creacion|date:'SHORT_DATE_FORMAT'}}-->
+		{{empleo.dias_publicado}}
+	</div>
+</div>

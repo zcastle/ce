@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<!--<nav class="menu"><a href="{% url main.views.empresa_editar %}">Editar perfil</a></nav>
+	<div class="perfil imagen"><img src="{{STATIC_URL}}images/no-disponible.png"></div>-->
+	{% ifequal request.user.empresa.im_logo '' %}
+		<div class="perfil imagene"><img src="{{STATIC_URL}}images/empresa.png"></div>
+	{% else %}
+		<div class="perfil imagene"><img src="{{MEDIA_URL}}{{request.user.empresa.im_logo}}"></div>
+	{% endifequal %}
+	<div class="perfil nombre"><span>Razon Social: </span>{{request.user.empresa.no_razon_social|title}}</div>
+	<div class="perfil nombre"><span>N. Comercial: </span>{{request.user.empresa.no_comercial|title}}</div>
+	<div class="perfil nombre"><span>RUC: </span>{{request.user.empresa.nu_ruc|title}}</div>
+	<div class="perfil nombre"><span>Direccion: </span>{{request.user.empresa.de_direccion|title}}</div>
+	<div class="perfil nombre"><span>Distrito: </span>{{request.user.empresa.ubigeo|title}}</div>
+	<div class="perfil email"><span>Email: </span>{{request.user.email|lower}}</div>
+	<div class="perfil email"><span>Site: </span><a href="{{request.user.empresa.no_web}}" target="_blank">{{request.user.empresa.no_web|lower}}</a></div>
+	<div class="perfil nombre"><span>Telefono Fijo: </span>{{request.user.empresa.nu_fijo}}</div>
+	<div class="perfil nombre"><span>Telefono Movil: </span>{{request.user.empresa.nu_movil}}</div>
+	<div class="perfil nombre"><span>Contacto: </span>{{request.user.empresa.no_contacto}}</div>
+	<div class="perfil nombre"><span>Telefono Contacto: </span>{{request.user.empresa.nu_telefono_contacto}}</div>
+	<div class="perfil email"><span>Correo Contacto: </span>{{request.user.empresa.no_email_contacto}}</div>
+{% endblock %}
+
+{% block perfil_empleos %}
+	<div class="column resultados borde-redondo">
+		{% include "publicaciones.html" %}
+		{% if empleos.count > 0 %}
+			<nav class="menu"><a href="{% url main.views.empresa_empleo_mostrar %}">Ver Mas</a></nav>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}
+{% block areas %}{% endblock %}
+{% block empresas %}{% endblock %}

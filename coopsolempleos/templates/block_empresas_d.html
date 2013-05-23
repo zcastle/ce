@@ -1,0 +1,16 @@
+<li>
+	<a href="{% url main.views.listar_por_empresas empresa.user.id %}">
+		{% if empresa.no_comercial %}
+			{{empresa.no_comercial|title}}
+		{% else %}
+			{{empresa.no_razon_social|title}}
+		{% endif %}
+	</a> 
+	<strong>
+		{% for ee in empleosempresas %}
+			{% if ee.id == empresa.id %}
+				({{ee.ca_empleos}})
+			{% endif %}
+		{% endfor %}
+	</strong>
+</li>

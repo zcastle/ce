@@ -1,0 +1,222 @@
+{% load i18n %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="es"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="es"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="es"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="es"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs -->
+	<meta charset="utf-8">
+	<title>Coopsol Empleos</title>
+	<meta name="description" content="">
+	<meta name="author" content="Gupo Coopsol">
+	<link href="{{STATIC_URL}}images/favicon.ico" rel="icon" type="image/x-icon" />
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS  -->
+	<link rel="stylesheet" href="{{STATIC_URL}}css/base.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/layout.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/dj.css">
+	<!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css">-->
+	<link rel="stylesheet" href="{{STATIC_URL}}css/redmond/jquery-ui-1.10.0.custom.min.css">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<!--[if IE]>
+	<link rel="stylesheet" href="{{STATIC_URL}}css/ie.css">
+	<![endif]-->
+	<!--
+	<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+	-->
+	<script src="{{STATIC_URL}}js/jquery-1.9.0.js"></script>
+	<script src="{{STATIC_URL}}js/jquery-ui-1.10.0.custom.js"></script>
+	<script src="{{STATIC_URL}}js/jquery.numeric.js"></script>
+
+	<!-- tinybox -->
+    <link rel="stylesheet" href="{{STATIC_URL}}css/style_tb.css" />
+    <script type="text/javascript" src="{{STATIC_URL}}js/tinybox.js"></script>
+	<!--  -->
+
+	<script src="{{STATIC_URL}}js/main.js"></script>
+	<script src="{{STATIC_URL}}js/ubigeo.js"></script>
+
+	<link href="{{ STATIC_URL }}css/facebook.css" type="text/css" rel="stylesheet" media="all" />
+	{% include 'django_facebook/_facebook_js.html' %}
+
+</head>
+<body>
+	<!-- Primary Page Layout -->
+	<div class="container">
+		<header class="header">
+			<a href="/"><img class="logo" src="{{STATIC_URL}}images/logo.png" /></a>
+			<div class="header-right">
+				<span class="fecha"></span>
+				<nav class="menu">
+					{% if not request.user.is_authenticated %}
+						<a href="{% url main.views.postulante_mostrar %}">Postulante</a>
+						<a href="{% url main.views.empresa_mostrar %}">Empresas</a>
+					{% else %}
+						{% for group in request.user.groups.all %}
+							{% if group.pk = 1 %}
+								<a href="{% url main.views.postulante_mostrar %}" class="lblUsuario">{{request.user.email}}</a>
+							{% elif group.pk = 2 %}
+								{% if request.user.empresa.no_razon_social %}
+									<a href="{% url main.views.empresa_mostrar %}" class="lblUsuario">{{request.user.empresa.no_razon_social|title}}</a>
+								{% else %}
+									<a href="{% url main.views.empresa_mostrar %}" class="lblUsuario">{{request.user.email}}</a>
+								{% endif %}
+							{% endif %}
+							{% if mensajesCount > 0 %}
+								<a href="{% url main.views.mensaje_mostrar 1 %}" class="fondomail" title="Mensaje(s) nuevos(s)">
+									<span class="mensaje">{{mensajesCount}}</span>
+								</a>
+							{% endif %}
+							<a href="{% url main.views.cerrar %}">Cerrar Sesion</a>
+						{% endfor %}
+					{% endif %}
+				</nav>
+			</div>
+			<form class="form-buscar" id="form-buscar" method="get" action='{% url main.views.buscar %}'><!--{% csrf_token %}-->
+				<input type="text" class="txt-buscar" name='text_buscar' placeholder="Busca por ubicación, área, puesto, empresa, etc." />
+				<input type="submit" class="btn-buscar" value="Buscar" />
+			</form>
+		</header>
+		<div class="column col-center">
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 1 %}
+					{% include "block_criterios.html" %}
+					{% include "block_criterios_opciones.html" %}
+				{% endif%}
+			{% empty %} 
+				{% include "block_criterios.html" %}
+				{% include "block_criterios_opciones.html" %}
+			{% endfor %}
+
+			<div class="column resultados borde-redondo">
+				{% block empleos_destacados_titulo %}{% endblock %}
+				{% block empleos_destacados %}{% endblock %}
+				{% block empleos_destacados_total %}{% endblock %}
+			</div>
+			{% block empresa_empleos_id %}{% endblock %}
+			{% block perfil_estudios %}{% endblock %}
+			{% block perfil_empleos %}{% endblock %}
+		</div>
+		<div class="column col-right">
+			{% block registro_rapido %}
+				{% if not request.user.is_authenticated %}
+					<!--{% include "block_registro_rapido.html" %}-->
+					<div class="column col-bloque borde-redondo">
+						<h4 class="text-center">Crea tu cuenta</h4>
+						<hr />
+						<form class="form-registro" action='{% url main.views.postulante_crear %}' method='POST'>{% csrf_token %}
+							{{formulario_d.as_p}}
+							<ul class="errorlist errorlist2" style="display: none"><li>Debe aceptar los terminos y condiciones</li></ul>
+							<input type="checkbox" id="chkTyc" checked /><span class="tyc">Acepto los <a href="{% url main.views.terminos_condiciones %}">términos y condiciones</a>
+							<input type="submit" id="btnRegistrar" value="Crear Cuenta" />
+							<span class="rc"><a href="{% url main.views.recuperar_password %}">Recuperar contraseña</a></span>
+							</span>
+						</form>
+						<!--<form class="form-registro" action="{% url facebook_connect %}?facebook_login=1" method="post">{% csrf_token %}
+							<a href="javascript:void(0);" style="font-size: 20px;" onclick="F.connect(this.parentNode);">Register, login or connect with facebook</a>
+							<input type="button" id="btnRegistrarFB" value="Ingresar con Facebook" onclick="F.connect(this.parentNode);" />
+							<input type="hidden" value="{{ request.path }}" name="next" />
+							<input type="hidden" value="{{ request.path }}" name="register_next" />
+							<input type="hidden" value="{{ request.path }}" name="error_next" />
+						</form>-->
+					</div>
+				{% endif %}
+			{% endblock %}
+			{% block preferencias %}
+				{% include "preferencias.html" %}
+			{% endblock %}
+			{% block areas %}
+				<div class="column col-bloque borde-redondo">
+					<h4 class="text-center">Áreas</h4>
+					<hr />
+					<ul class="square">
+						{% for area in areas|slice:":15" %}
+							{% include "block_areas_d.html" %}
+						{% endfor %}
+					</ul>
+					<hr />
+					<div class="ver-mas"><a href="{% url main.views.listar_areas %}">Ver mas</a></div>
+				</div>
+			{% endblock %}
+			{% block empresas %}
+				<div class="column col-bloque borde-redondo">
+					<h4 class="text-center">Empresas</h4>
+					<hr />
+					<ul class="square">
+						{% for empresa in empresas|slice:":15" %}
+							{% include "block_empresas_d.html" %}
+						{% endfor %}
+					</ul>
+					<hr />
+					<div class="ver-mas"><a href="{% url main.views.listar_empresas %}">Ver mas</a></div>
+				</div>
+			{% endblock %}
+			{% block tipoempleo %}
+				<div class="column col-bloque borde-redondo">
+					<h4 class="text-center">Tipos de Empleo</h4>
+					<hr />
+					<ul class="square">
+						{% for tipoempleo in tipoempleos %}
+							{% include "block_tipoempleos_d.html" %}
+						{% endfor %}
+					</ul>
+				</div>
+			{% endblock %}
+			<!--<div>
+				<iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fgrupocoopsoloficial&amp;width=227&amp;height=290&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:227px; height:290px;" allowTransparency="true"></iframe>
+			</div>-->
+		</div>
+		<footer class="footer column borde-redondo">
+			<div class="menu-pie-top">
+				<div class="menu-pie">
+					<h4>Acceso</h4>
+					<hr>
+					<ul>
+						<li><a href="{% url main.views.postulante_mostrar %}">Postulante</a></li>
+						<li><a href="{% url main.views.empresa_mostrar %}">Empresas</a></li>
+						<li><a href="{% url main.views.postulante_crear %}">Registrar</a></li>
+					</ul>
+				</div>
+				<div class="menu-pie">
+					<h4>Coopsol Empleos</h4>
+					<hr>
+					<ul>
+						<li><a href="{% url main.views.nosotros %}">Nosotros</a></li>
+						<li><a href="{% url main.views.terminos_condiciones %}">Terminos y Condiciones</a></li>
+						<li><a href="{% url main.views.preguntas_frecuentes %}">Preguntas Frecuentes</a></li>
+						<!--<li><a href="">Ayuda en Linea</a></li>-->
+						<li><a href="{% url main.views.libro_reclamaciones %}">Libro de Reclamaciones</a></li>
+					</ul>
+				</div>
+				<div class="menu-pie">
+					<h4>Donde Ubicarnos</h4>
+					<hr>
+					<a href="#" onclick="TINY.box.show({url:'{{STATIC_URL}}mapa-grande.html',width:500,height:375}); return false;"><img src="{{STATIC_URL}}images/mapa.jpg" style="margin-left: 5px;"></a>
+				</div>
+				<div class="menu-pie">
+					<h4 class="text-center">&nbsp;</h4>
+					<hr />
+					<div>
+						Direccion: Calle Chinchon 821 <br>
+						San Isidro - Lima - Peru <br>
+						Telefonos: 421-2912 / 4213654
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="menu-pie-bottom">
+				<span>&copy;COOPSOL EMPLEOS | 2013 | Departamento de Sistemas GRUPO COOPSOL</span>
+			</div>
+		</footer>
+	</div><!-- container -->
+
+<!-- End Document -->
+</body>
+</html>

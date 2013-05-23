@@ -1,0 +1,15 @@
+<div class="column col-bloque borde-redondo">
+	<h4 class="text-center">Crea tu cuenta</h4>
+	<hr />
+	<form class="form-registro" action='{% url main.views.postulante_crear %}' method='POST'>{% csrf_token %}
+		{{formulario_d.as_p}}
+		<span class="rc"><a href="">Recuperar contraseña</a></span>
+		<input type="checkbox" id="chkTyc" checked /><span class="tyc">Acepto los <a href="">términos y condiciones</a></span>
+		<input type="submit" id="btnRegistrar" value="Crear Cuent" />
+	</form>
+	<hr />
+	<form class="form-registro">
+		<input type="button" value="Ingresar con facebook" />
+		<input type="button" value="Ingresar con twitter" />
+	</form>
+</div>

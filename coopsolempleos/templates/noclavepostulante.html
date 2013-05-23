@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<h5>Clave Errada</h5>
+	<h4><a href="{% url main.views.postulante_ingresar %}">Volver a intentar</a></h4>
+{% endblock %}
+
+{% block areas_d %}
+	{% for area in areas %}
+		{% include "block_areas_d.html" %}
+	{% endfor %}
+{% endblock %}
+
+{% block empresas_d %}
+	{% for empresa in empresas %}
+		{% include "block_empresas_d.html" %}
+	{% endfor %}
+{% endblock %}

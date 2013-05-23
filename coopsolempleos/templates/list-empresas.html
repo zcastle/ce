@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados_titulo %}
+{% endblock %}
+
+{% block empleos_destacados %}
+	<h4 class="text-center">Lista de Empresas</h4>
+	<hr />
+	<div class="column" style="width: 50%;">
+		<ul class="square">
+			{% for empresa in empresas|slice:":10" %}
+				{% include "block_empresas_d.html" %}
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="column" style="width: 49%; margin-left: 1px;">
+		<ul class="square">
+			{% for empresa in empresas|slice:"10:20" %}
+				{% include "block_empresas_d.html" %}
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
+
+{% block empleos_destacados_total %}
+	<div class="column resultados count" style="text-align: right;">
+		<hr />
+		Total Empresas: <strong>{{empresas.count}}</strong>
+	</div>
+{% endblock %}

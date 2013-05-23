@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados_titulo %}
+	{% if not request.user.is_authenticated %}
+		<h4>Empleos destacados</h4>
+	{% else %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<h4>Empleos destacados en: <strong>Lima</strong></h4>
+			{% elif group.pk = 2 %}
+				<h4>Empleos destacados</h4>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+{% block empleos_destacados %}
+	{% for empleo in empleos %}
+		{% include "block_empleos_destacados.html" %}
+	{% endfor %}
+{% endblock %}
+
+
+{% block empleos_destacados_total %}
+	<!--<div class="column resultados count" style="text-align: right;">
+		<hr />
+		Total resultados: <strong>{{empleos.count}}</strong>
+	</div>-->
+	<nav class="menu">
+		{% if empleos.has_previous %}
+			<a href="?page={{empleos.previous_page_number}}">Anterior</a>
+		{% endif %}
+			<a>Pagina {{ empleos.number }} de {{ empleos.paginator.num_pages }}</a>
+		{% if empleos.has_next %}
+			<a href="?page={{empleos.next_page_number}}">Siguiente</a>
+		{% endif %}
+		<!--<a>Total resultados: <strong>{{empleos.paginator.count}}</strong></a>-->
+	</nav>
+{% endblock %}

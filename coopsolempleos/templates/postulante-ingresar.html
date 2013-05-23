@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados_titulo %}
+	{% if activo %}
+		<h4 style="color: #F00;">Tu cuenta ha sido activada, ahora puedes ingresar.</h4>
+	{% endif %}
+{% endblock %}
+{% block empleos_destacados %}
+	<div class="form-dialog">
+		<h3>Ingresa a tu cuenta</h3>
+		<form id="form-ingresar" method="post" action='{% url main.views.postulante_ingresar %}'>{% csrf_token %}
+			{{formulario.as_p}}
+			<input type="checkbox" checked /><span>Seguir conectado</span>
+			<p><input id='btn-ingresar-postulante' type='submit' value='Ingresar' />
+				<a href="{% url main.views.recuperar_password %}" class='rcd'>Recuperar tu contraseña</a></p>
+		</form>
+	</div>
+	<div class="line_v"></div>
+	<div class="form-dialog form-dialog-right">
+		<h3>No tienes cuenta</h3>
+		<input type="button" value="Crea tu cuenta" onclick="window.location.href='{% url main.views.postulante_crear %}'" /><br>
+		<!--<hr>
+		<input type="button" value="Ingresar con facebook" /><br>
+		<input type="button" value="Ingresar con twitter" /><br>-->
+	</div>
+{% endblock %}
+{% block registro_rapido %}{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	{% for group in request.user.groups.all %}
+		{% if group.pk = 2 %}
+			<nav class="menu">
+				<a href="{% url main.views.mensaje_enviar postulante.user.pk request.id_empleo 0 %}">Enviar mensaje</a>
+			</nav>
+		{% endif %}
+	{% endfor %}
+	<!--<div class="perfil imagen"><img src="{{STATIC_URL}}images/no-disponible.png"></div>-->
+	{% if postulante.im_foto == '' %}
+		{% if postulante.sexo.pk == 1 %}
+			<div class="perfil imagen"><img src="{{STATIC_URL}}images/xy.png"></div>
+		{% else %}
+			<div class="perfil imagen"><img src="{{STATIC_URL}}images/xx.png"></div>
+		{% endif %}
+	{% else %}
+		<div class="perfil imagen"><img src="{{MEDIA_URL}}{{postulante.im_foto}}"></div>
+	{% endif %}
+	
+	<div class="perfil nombre"><span style='font-size: 1.5em; margin-top: 8px;'>{{postulante.no_postulante}} {{postulante.ap_postulante}} {{request.user.postulante.am_postulante}}</span></div>
+	<div class="perfil nombre">{{postulante.fe_nacimiento}} <strong>({{postulante.get_anios}}) Años</strong></div>
+	<div class="perfil nombre">{{postulante.estadocivil}}</div>
+
+	<div class="perfil email">{{postulante.user.email}}</div>
+	<div class="perfil nombre">{{postulante.nu_movil}}</div>
+	<div class="perfil nombre">{{postulante.de_direccion}}</div>
+	<div class="perfil nombre">{{postulante.ubigeo}}</div>
+	{% if postulante.fl_licencia %}
+		<div class="perfil nombre">Licencia de conducir <strong>{{postulante.tipolicencia}}</strong></div>
+		{% if postulante.fl_auto_propio %}
+		<div class="perfil nombre">Auto propio: <strong>Sí</strong></div>
+		{% endif %}
+	{% endif %}
+	<div class="perfil sobremi" style="width: 690px;">{{postulante.de_sobremi}}</div>
+{% endblock %}
+
+{% block perfil_estudios %}
+	<div class="column resultados borde-redondo">
+		{% if estudios.count > 0 %}
+			<h5><strong>Estudios Realizados</strong></h5>
+		{% else %}
+			<h5><strong>No hay estudios registrados</strong></h5>
+		{% endif %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<nav class="menu"><a href="{% url main.views.postulante_estudios_agregar %}">Agregar</a></nav>
+			{% endif %}
+		{% endfor %}
+		{% for estudio in estudios %}
+			<hr class="p">
+			<div class="estudios institucion">{{estudio.institucion}}
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 1 %}
+					<a href="{% url main.views.postulante_estudios_editar estudio.pk %}" class='icono-texto'><img src="{{STATIC_URL}}images/ico-editar.png" title="Editar"></a>
+					<a href="{% url main.views.postulante_estudios_eliminar estudio.pk %}" class='icono-texto ico-eliminar'><img src="{{STATIC_URL}}images/ico-eliminar.png" title="Eliminar"></a>
+				{% endif %}
+			{% endfor %}
+			</div>
+			<div class="estudios carrera">{{estudio.carrera}}</div>
+			<div class="estudios periodo">Periodo: {{estudio.fe_periodo_ini}} -
+				{% if estudio.fl_actualidad %}
+					Actualidad
+				{% else %}
+					{{estudio.fe_periodo_fin}}
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block perfil_empleos %}
+	<div class="column resultados borde-redondo">
+		{% if empleos.count > 0 %}
+			<h5><strong>Ultimos Empleos</strong></h5>
+		{% else %}
+			<h5><strong>No hay empleos registrados</strong></h5>
+		{% endif %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<nav class="menu"><a href="{% url main.views.postulante_empleos_agregar %}">Agregar</a></nav>
+			{% endif %}
+		{% endfor %}
+		{% for empleo in empleos %}
+			<hr class="p">
+			<div class="estudios institucion">{{empleo.no_empresa}}
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 1 %}
+					<a href="{% url main.views.postulante_empleo_editar empleo.pk %}" class='icono-texto'><img src="{{STATIC_URL}}images/ico-editar.png" title="Editar"></a>
+					<a href="{% url main.views.postulante_empleo_eliminar empleo.pk %}" class='icono-texto ico-eliminar'><img src="{{STATIC_URL}}images/ico-eliminar.png" title="Eliminar"></a>
+				{% endif %}
+			{% endfor %}
+			</div>
+			<div class="empleos cargo">{{empleo.no_cargo}}</div>
+			<div class="empleos periodo">Periodo: {{empleo.fe_periodo_ini}} -
+				{% if empleo.fl_actualidad %}
+					Actualidad
+				{% else %}
+					{{empleo.fe_periodo_fin}}
+				{% endif %}
+			</div>
+			<div class="empleos referencia"><strong>Referencia: </strong>{{empleo.no_referencia|title}}</div>
+			<div class="empleos referencia-cargo"><strong>Cargo: </strong>{{empleo.no_referencia_cargo|title}}</div>
+			<div class="empleos referencia-telefono"><strong>Telefono: </strong>{{empleo.nu_referencia_telefono}}</div>
+		{% endfor %}
+	</div>
+	<div class="column resultados borde-redondo">
+		{% if idiomas.count > 0 %}
+			<h5><strong>Idiomas</strong></h5>
+		{% else %}
+			<h5><strong>No hay idiomas registrados</strong></h5>
+		{% endif %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<nav class="menu"><a href="{% url main.views.postulante_idiomas_agregar %}">Agregar</a></nav>
+			{% endif %}
+		{% endfor %}
+		{% for idioma in idiomas %}
+			<hr class="p">
+			<div class="estudios institucion">{{idioma.idioma}} - {{idioma.nivel}}
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 1 %}
+					<a href="{% url main.views.postulante_idiomas_editar idioma.pk %}" class='icono-texto'><img src="{{STATIC_URL}}images/ico-editar.png" title="Editar"></a>
+					<a href="{% url main.views.postulante_idiomas_eliminar idioma.pk %}" class='icono-texto ico-eliminar'><img src="{{STATIC_URL}}images/ico-eliminar.png" title="Eliminar"></a>
+				{% endif %}
+			{% endfor %}
+		</div>
+		{% endfor %}
+	</div>
+	<div class="column resultados borde-redondo">
+		{% if programas.count > 0 %}
+			<h5><strong>Conocimientos de Computo</strong></h5>
+		{% else %}
+			<h5><strong>No hay conocimientos de computo registrados</strong></h5>
+		{% endif %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<nav class="menu"><a href="{% url main.views.postulante_programas_agregar %}">Agregar</a></nav>
+			{% endif %}
+		{% endfor %}
+		{% for programa in programas %}
+			<hr class="p">
+			<div class="estudios institucion">{{programa.programa}} - {{programa.nivel}}
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 1 %}
+					<a href="{% url main.views.postulante_programas_editar programa.pk %}" class='icono-texto'>
+						<img src="{{STATIC_URL}}images/ico-editar.png" title="Editar">
+					</a>
+					<a href="{% url main.views.postulante_programas_eliminar programa.pk %}" class='icono-texto ico-eliminar'>
+						<img src="{{STATIC_URL}}images/ico-eliminar.png" title="Eliminar">
+					</a>
+				{% endif %}
+			{% endfor %}
+		</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

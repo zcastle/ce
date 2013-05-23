@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	{% for group in destinatario.groups.all %}
+		{% if group.pk = 1 %}
+			<h5>Mensaje Para: <strong>{{ destinatario.postulante.get_nombre_completo|title }}</strong></h5>
+		{% elif group.pk = 2 %}
+			<h5>Mensaje Para: <strong>{{ destinatario.empresa|title }}</strong></h5>
+		{% endif %}
+	{% endfor %}
+	<hr class="p">
+	<form id="form-crear" method="post" action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<p><input type='submit' value='Enviar' /></p>
+	</form>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

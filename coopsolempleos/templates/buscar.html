@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados_titulo %}
+	{% if empleos.count > 0 %}
+		<h4>Resultados para: <strong>{{text_buscar|title}}</strong></h4>
+	{% else %}
+		<h4>No hay resultados para: <strong>{{text_buscar|title}}</strong></h4>
+	{% endif %}
+{% endblock %}
+
+{% block empleos_destacados %}
+	{% for empleo in empleos %}
+		{% include "block_empleos_destacados.html" %}
+	{% endfor %}
+{% endblock %}
+
+{% block empleos_destacados_total %}
+	<div class="column resultados count" style="text-align: right;">
+		<hr />
+		Total resultados: <strong>{{empleos.count}}</strong>
+	</div>
+{% endblock %}

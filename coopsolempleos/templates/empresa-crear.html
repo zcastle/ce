@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<form id="form-crear" method="post" action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<input type="checkbox" id="chkTyc" checked /><span class="tyc">Acepto los <a href="{% url main.views.terminos_condiciones %}">términos y condiciones</a></span>
+		<ul class="errorlist errorlist2" style="display: none"><li>Debe aceptar los terminos y condiciones</li></ul>
+		<p><input type='submit' id="btnRegistrar" value='Registrar' /></p>
+	</form>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

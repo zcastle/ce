@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	{% include "publicaciones.html" %}
+	{% if empleos.paginator.count > 0 %}
+		<nav class="menu">
+			{% if empleos.has_previous %}
+				<a href="?page={{empleos.previous_page_number}}">Anterior</a>
+			{% endif %}
+				<a>Pagina {{ empleos.number }} de {{ empleos.paginator.num_pages }}</a>
+			{% if empleos.has_next %}
+				<a href="?page={{empleos.next_page_number}}">Siguiente</a>
+			{% endif %}
+			<!--<a>Total resultados: <strong>{{empleos.paginator.count}}</strong></a>-->
+		</nav>
+	{% endif %}
+{% endblock %}
+
+{% block perfil_empleos %}
+	
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}
+{% block areas %}{% endblock %}
+{% block empresas %}{% endblock %}

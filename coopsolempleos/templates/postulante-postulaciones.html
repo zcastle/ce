@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	{% if postulanteEmpresaEmpleo.count > 0 %}
+		<h5><strong>Postulaciones</strong></h5>
+	{% else %}
+		<h5><strong>No hay postulaciones registradas</strong></h5>
+	{% endif %}
+	{% for pee in postulanteEmpresaEmpleo %}
+		<hr class="p">
+		<div class="estudios institucion">
+			{% if pee.empleo.user.empresa.no_comercial %}
+				<a href="{% url main.views.empresa_mostrar_id pee.empleo.user.empresa.pk %}">{{pee.empleo.user.empresa}}</a>
+			{% else %}
+				<a href="{% url main.views.empresa_mostrar_id pee.empleo.user.empresa.pk %}">{{pee.empleo.user.empresa.no_razon_social}}</a>
+			{% endif %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<a href="#" class='icono-texto ico-eliminar'><img src="{{STATIC_URL}}images/ico-eliminar.png" title="Eliminar" style='margin-top: 2px;'></a>
+			{% endif %}
+		{% endfor %}
+		</div>
+		<div class="empleos referencia-telefono"><a href="{% url main.views.empleo_id pee.empleo.id %}">{{pee.empleo.no_empleo|upper}}</a></div>
+		<div class="empleos referencia-telefono"><strong>Postulaste el: </strong>{{pee.fe_creacion|date:'SHORT_DATE_FORMAT'}}</div>
+	{% endfor %}
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

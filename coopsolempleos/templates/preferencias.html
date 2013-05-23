@@ -1,0 +1,26 @@
+{% if request.user.is_authenticated %}
+	<div class="column col-bloque borde-redondo">
+		<h4 class="text-center">Preferecias</h4>
+		<hr />
+		<ul class="square">
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 1 %}
+					<li><a href="{% url main.views.postulante_mostrar %}">Mi Perfil</a></li>
+					<li><a href="{% url main.views.postulante_editar %}">Editar Perfil</a></li>
+					<li><a href="{% url main.views.postulante_editar_password %}">Cambiar Contraseña</a></li>
+					<li><a href="http://www.coopsol.com/topdf/?id={{request.user.pk}}">Exportar Curriculum</a></li>
+					<li><a href="{% url main.views.postulante_notificaciones %}">Notificaciones</a></li>
+					<li><a href="{% url main.views.postulante_postulaciones %}">Mis Postulaciones</a></li>
+					<li><a href="{% url main.views.postulante_eliminar %}">Eliminar Cuenta</a></li>
+				{% elif group.pk = 2 %}
+					<li><a href="{% url main.views.empresa_mostrar %}">Mi Perfil</a></li>
+					<li><a href="{% url main.views.empresa_editar %}">Editar Perfil</a></li>
+					<!--<li><a href="#">Cambiar Contraseña</a></li>-->
+					<li><a href="{% url main.views.empresa_notificaciones %}">Notificaciones</a></li>
+					<li><a href="{% url main.views.empresa_empleo_mostrar %}">Mis Publicaciones</a></li>
+					<li><a href="{% url main.views.empresa_eliminar %}">Eliminar Cuenta</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+{% endif %}

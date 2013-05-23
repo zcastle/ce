@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados_titulo %}
+{% endblock %}
+
+{% block empleos_destacados %}
+	<h4 class="text-center">Lista de Areas</h4>
+	<hr />
+	<div class="column" style="width: 33%;">
+		<ul class="square">
+			{% for area in areas|slice:":10" %}
+				{% include "block_areas_d.html" %}
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="column" style="width: 33%; margin-left: 1px;">
+		<ul class="square">
+			{% for area in areas|slice:"10:20" %}
+				{% include "block_areas_d.html" %}
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="column" style="width: 33%; margin-left: 1px;">
+		<ul class="square">
+			{% for area in areas|slice:"20:30" %}
+				{% include "block_areas_d.html" %}
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
+
+{% block empleos_destacados_total %}
+	<div class="column resultados count" style="text-align: right;">
+		<hr />
+		Total Áreas: <strong>{{areas.count}}</strong>
+	</div>
+{% endblock %}

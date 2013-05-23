@@ -1,0 +1,37 @@
+{% if empleos.count > 0 %}
+	<h5><strong>Ultimas Publicaciones</strong></h5>
+{% else %}
+	<h5><strong>No hay publicaciones ingresadas</strong></h5>
+{% endif %}
+{% if request.user.is_authenticated %}
+	{% for group in request.user.groups.all %}
+		{% if group.pk = 2 %}
+			<nav class="menu"><a href="{% url main.views.empresa_empleo_agregar %}">Agregar</a></nav>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+{% for empleo in empleos %}
+	<hr class="p">
+	<div class="empleos empresa">
+		<a href="{% url main.views.empresa_empleo_id empleo.pk %}">{{empleo.no_empleo}}
+	</a>
+		{% if request.user.is_authenticated %}
+			{% for group in request.user.groups.all %}
+				{% if group.pk = 2 %}
+					<span style='color: #f00; font-size: 1em;'>
+						{% for empleospostulante in empleospostulantes %}
+							{% if empleo.pk == empleospostulante.id %}
+								({{empleospostulante.ca_postulantes}})
+							{% endif %}
+						{% endfor %}
+					</span>
+					<a href="{% url main.views.empresa_empleo_editar empleo.pk %}"><img src="{{STATIC_URL}}images/ico-editar.png" title="Editar" style='margin-top: 2px;'></a>
+					<a href="{% url main.views.empresa_empleo_eliminar empleo.pk %}" class='ico-eliminar'><img src="{{STATIC_URL}}images/ico-eliminar.png" title="Eliminar" style='margin-top: 2px;'></a>
+					<a href="{% url main.views.empresa_empleo_clonar empleo.pk %}"><img src="{{STATIC_URL}}images/ico-clonar.png" title="Clonar Publicacion" style='margin-top: 2px;'></a>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div class="empleos cargo"><span>Publicacion:</span> {{empleo.fe_creacion|date:'SHORT_DATE_FORMAT'}}</div>
+	<div class="empleos cargo"><span>Area:</span> {{empleo.area.no_area}}</div>
+{% endfor %}

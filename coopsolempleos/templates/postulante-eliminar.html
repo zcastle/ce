@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<h4>Eliminar Cuenta</h4><hr class="p">
+	<form id="form-crear" method="post" enctype='multipart/form-data' action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<input type="checkbox" id="chkTyc" /><span class="tyc">Acepto eliminar mi cuenta de manera irreversible.</span>
+		<ul class="errorlist errorlist2" style="display: none"><li>Debe aceptar la eliminacion de su cuenta</li></ul>
+		<p><input type='submit' id="btnRegistrar" value='Eliminar Cuenta' /></p>	
+	</form>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

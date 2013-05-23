@@ -1,0 +1,53 @@
+	{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<div class="empleo empresa text-center"><a href="{% url main.views.listar_por_empresas empleo.user.id %}">{{empleo.user.empresa.no_comercial}}</a></div>
+	<div class="empleo email text-center">{{empleo.user.empresa.no_email}}</div>
+	<div class="empleo email text-center">{{empleo.user.empresa.no_web}}</div>
+	<hr>
+	<nav class="menu"><a href="{% url main.views.empresa_empleo_editar empleo.pk %}">Editar</a></nav>
+	{% if postulando %}
+		<div class="postulando">Actualmente estas postulando a este empleo, pronto estaremos en contacto contigo.</div>
+	{% endif %}
+	{% if not request.user.is_authenticated %}
+		<nav class="menu"><a href="{%url main.views.empresa_postular_id empleo.id%}">Postular al Empleo</a></nav>
+	{% else %}
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<nav class="menu"><a href="{%url main.views.empresa_postular_id empleo.id%}">Postular al Empleo</a></nav>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	<div class="empleo empresa">{{empleo|upper}}</div>
+	<div class="empleo cargos">{{empleo.de_empleo|capfirst}}</div><br>
+	<div class="empleo cargo"><span class="tituleleft">Fecha de publicacion:</span>{{empleo.fe_creacion|date:'SHORT_DATE_FORMAT'}}</div>
+	<div class="empleo cargo"><span class="tituleleft">Area:</span>{{empleo.area.no_area}}</div>
+	<div class="empleo cargo"><span class="tituleleft">Distrito:</span>{{empleo.ubigeo}}</div>
+	<div class="empleo cargo"><span class="tituleleft">Requisitos:</span>{{empleo.de_requisitos}}</div>
+	<div class="empleo cargo"><span class="tituleleft">Funciones:</span>{{empleo.de_funciones}}</div>
+	{% if empleo.va_sueldo > 0 %}
+		<div class="empleo cargo"><span class="tituleleft">Sueldo:</span>{{empleo.va_sueldo|floatformat:'2'}}</div>
+	{% else %}
+		<div class="empleo cargo"><span class="tituleleft">Sueldo:</span>No Especificado</div>
+	{% endif %}
+	<div class="empleo cargo"><span class="tituleleft">Tipo De Empleo:</span>{{empleo.tipoempleo.no_tipo_empleo}}</div>
+
+	<div class="empleo cargo"><span class="tituleleft">Contacto:</span>{{empleo.no_contacto}}</div>
+	<div class="empleo cargo"><span class="tituleleft">Telefono:</span>{{empleo.no_contacto_telefono}}</div>
+	<div class="empleo email"><span class="tituleleft">Email:</span>{{empleo.no_contacto_email}}</div>
+	<div class="empleo email"><span class="tituleleft">Estado:</span>{{empleo.estado}}</div>
+{% endblock %}
+{% block empresa_empleos_id %}
+	<div class="column resultados borde-redondo">
+		{% if empleospostulantes|length > 0 %}
+			<h5><strong>Postulantes:</strong></h5>
+		{% else %}
+			<h5><strong>No hay postulantetulantes registrados</strong></h5>
+		{% endif %}
+		{% for empleospostulante in empleospostulantes %}
+			<hr class="p">
+			<div class="empleo empresa"><a href="{% url main.views.postulante_mostrar_id empleospostulante.postulante.user.pk empleo.pk %}">{{empleospostulante.postulante.no_postulante|upper}} {{empleospostulante.postulante.ap_postulante|upper}} {{empleospostulante.postulante.am_postulante|upper}}</a></div>
+			<div class="empleo cargos"><strong>Postulo el: </strong>{{empleospostulante.fe_creacion|date:'SHORT_DATE_FORMAT'}}</div>
+		{% endfor %}
+	</div>
+{% endblock %}

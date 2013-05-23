@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<h5><strong style="color: #369;">{{mensaje.de_asunto|upper}}</strong></h5>
+	<nav class="menu">
+		{% for group in request.user.groups.all %}
+			{% if group.pk = 1 %}
+				<a href="{% url main.views.mensaje_enviar mensaje.remitente.empresa.user.pk mensaje.postulanteempresaempleo.empleo.pk mensaje.pk %}">Responder</a>
+			{% elif group.pk = 2 %}
+				<a href="{% url main.views.mensaje_enviar mensaje.remitente.postulante.user.pk mensaje.postulanteempresaempleo.empleo.pk mensaje.pk %}">Responder</a>
+			{% endif %}
+		{% endfor %}
+	</nav>
+	<hr class="p">
+	{% for group in request.user.groups.all %}
+		{% if group.pk = 1 %}
+			<div class="estudios carrera"><span class="etiqueta">De: </span>{{mensaje.remitente.empresa}}</div>
+		{% elif group.pk = 2 %}
+			<div class="estudios carrera"><span class="etiqueta">De: </span>{{mensaje.remitente.postulante.get_nombre_completo}}</div>
+		{% endif %}
+	{% endfor %}
+	{% if mensaje.postulanteempresaempleo.empleo.no_empleo %}
+	<div class="estudios carrera"><span class="etiqueta">Puesto: </span>{{mensaje.postulanteempresaempleo.empleo.no_empleo}}</div>
+	{% endif %}
+	<div class="estudios carrera"><span class="etiqueta">Enviado: </span>{{mensaje.fe_creacion|date:'SHORT_DATE_FORMAT'}}</div>
+	<br/>
+	<div class="estudios carrera">{{mensaje.de_mensaje}}</div>
+
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

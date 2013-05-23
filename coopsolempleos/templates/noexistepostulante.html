@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<h5>Postulante No existe</h5>
+{% endblock %}
+
+{% block areas_d %}
+	{% for area in areas %}
+		{% include "block_areas_d.html" %}
+	{% endfor %}
+{% endblock %}
+
+{% block empresas_d %}
+	{% for empresa in empresas %}
+		{% include "block_empresas_d.html" %}
+	{% endfor %}
+{% endblock %}

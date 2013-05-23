@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<!--<nav class="menu"><a href="{% url main.views.empresa_editar %}">Editar perfil</a></nav>
+	<div class="perfil imagen"><img src="{{STATIC_URL}}images/no-disponible.png"></div>-->
+	{% ifequal empresa.im_logo '' %}
+		<div class="perfil imagene"><img src="{{STATIC_URL}}images/empresa.png"></div>
+	{% else %}
+		<div class="perfil imagene"><img src="{{MEDIA_URL}}{{request.user.empresa.im_logo}}"></div>
+	{% endifequal %}
+	<div class="perfil nombre"><span>Razon Social: </span>{{empresa.no_razon_social|title}}</div>
+	<div class="perfil nombre"><span>N. Comercial: </span>{{empresa.no_comercial|title}}</div>
+	<div class="perfil nombre"><span>RUC: </span>{{empresa.nu_ruc|title}}</div>
+	<div class="perfil nombre"><span>Direccion: </span>{{empresa.de_direccion|title}}</div>
+	<div class="perfil nombre"><span>Distrito: </span>{{empresa.ubigeo|title}}</div>
+	<div class="perfil email"><span>Email: </span>{{empresa.user.email|lower}}</div>
+	<div class="perfil email"><span>Site: </span><a href="{{empresa.no_web}}" target="_blank">{{empresa.no_web|lower}}</a></div>
+	<div class="perfil nombre"><span>Telefono Fijo: </span>{{empresa.nu_fijo}}</div>
+	<div class="perfil nombre"><span>Telefono Movil: </span>{{empresa.nu_movil}}</div>
+	<div class="perfil nombre"><span>Contacto: </span>{{empresa.no_contacto}}</div>
+	<div class="perfil nombre"><span>Telefono Contacto: </span>{{empresa.nu_telefono_contacto}}</div>
+	<div class="perfil email"><span>Correo Contacto: </span>{{empresa.no_email_contacto}}</div>
+{% endblock %}
+
+{% block perfil_empleos %}
+	<div class="column resultados borde-redondo">
+		{% include "publicaciones.html" %}
+	</div>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}
+{% block areas %}{% endblock %}
+{% block empresas %}{% endblock %}
