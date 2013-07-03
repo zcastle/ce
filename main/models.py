@@ -92,6 +92,12 @@ def get_empleoestado_pais():
 def get_default_tipoempleo():
     return TipoEmpleo.objects.get(pk=1)
 
+class Preguntas(models.Model):
+	no_pregunta = models.CharField(max_length=255, verbose_name='Pregunta')
+
+	def __unicode__(self):
+		return self.no_pregunta
+
 class Empleo(models.Model):
 	no_empleo = models.CharField(max_length=255, verbose_name='Titulo del empleo')
 	de_empleo = models.TextField(verbose_name='Descripción')
@@ -109,6 +115,7 @@ class Empleo(models.Model):
 	ubigeo = models.ForeignKey(Ubigeo)
 	estado = models.ForeignKey(EmpleoEstado, default=get_empleoestado_pais)
 	user = models.ForeignKey(User)
+	#preguntas = models.ManyToManyField(Preguntas)
 
 	def __unicode__(self):
 		return self.no_empleo

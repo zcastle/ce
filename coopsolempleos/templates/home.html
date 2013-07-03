@@ -28,11 +28,20 @@
 	</div>-->
 	<nav class="menu">
 		{% if empleos.has_previous %}
-			<a href="?page={{empleos.previous_page_number}}">Anterior</a>
+			<a href="?page=1"><<</a>
+			<a href="?page={{empleos.previous_page_number}}"><</a>
 		{% endif %}
-			<a>Pagina {{ empleos.number }} de {{ empleos.paginator.num_pages }}</a>
+			<!--<a>Pagina {{ empleos.number }} de {{ empleos.paginator.num_pages }}</a>-->
+				{% for page in empleos.paginator.page_range|slice:":10" %}
+					{% ifequal page empleos.number %}
+						<a style="font-weight: bold; color: #369;">{{page}}</a>
+					{% else %}
+						<a href="/?page={{page}}">{{page}}</a>
+					{% endifequal %}
+				{% endfor %}
 		{% if empleos.has_next %}
-			<a href="?page={{empleos.next_page_number}}">Siguiente</a>
+			<a href="?page={{empleos.next_page_number}}">></a>
+			<a href="?page={{empleos.paginator.num_pages}}">>></a>
 		{% endif %}
 		<!--<a>Total resultados: <strong>{{empleos.paginator.count}}</strong></a>-->
 	</nav>

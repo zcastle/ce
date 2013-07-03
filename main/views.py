@@ -40,7 +40,7 @@ def home(request):
 	else:
 		empleos_list = Empleo.objects.all().order_by('-fe_creacion')
 
-	paginator = Paginator(empleos_list, 15)
+	paginator = Paginator(empleos_list, 10)
 	page = request.GET.get('page')
 	try:
 		empleos = paginator.page(page)
@@ -210,6 +210,7 @@ def empresa_mostrar_id(request, id_empresa):
 		return render_to_response('empresa-mostrar-id.html', locals(), context_instance=RequestContext(request))
 
 @login_required(login_url='/empresa/ingresar')
+#request.POST['email']
 def empresa_empleo_agregar(request):
 	if request.method == 'POST':
 		formulario = EmpresaEmpleoForm(request.POST)
@@ -1050,3 +1051,6 @@ def preguntas_frecuentes(request):
 
 def libro_reclamaciones(request):
 	return render_to_response('libro-reclamaciones.html', context_instance=RequestContext(request))
+
+def nuestros_clientes(request):
+	return render_to_response('nuestros-clientes.html', context_instance=RequestContext(request))

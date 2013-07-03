@@ -1,11 +1,11 @@
-# Django settings for coopsolempleos project.
 #encoding:utf-8
 
+# Django settings for coopsolempleos project.
 # Identificando la ruta del proyecto
 import os
 PATH_PROJECT = os.path.dirname(os.path.realpath(__file__))
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 EXTJS4_DEBUG = DEBUG
 

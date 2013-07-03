@@ -323,6 +323,46 @@ $(function() {
         return false;
     })
 
+    $('#id_ubigeo_0').prev('label').text('Departamento:');
+
+
+    var form_count = 0; //$("[name=extra_field_count]");
+
+    $("#add-another").click(function() {
+        element = $('<input type="text" />');
+        element.attr('name', 'extra_field_' + form_count);
+        element.attr('class', 'add-field');
+        element.hide();
+        //$("#form-crear").append(element);
+        // build element and append it to our forms container
+        $("#add-another").before(element);
+        element.show('slow');
+
+        form_count ++;
+        $("[name=extra_field_count]").val(form_count);
+        // increment form count so our view knows to populate 
+        // that many fields for validation
+        return false;
+    })
+    $('.grupo').mouseenter(function(event){
+        event.preventDefault();
+        $('.grupo ul').css('visibility', 'visible');
+        $(this).animate({
+            height: '290px'
+        }, 300);
+    });
+
+    $('.grupo').mouseleave(function(event){
+        event.preventDefault();
+        $(this).animate({
+            height: '20px'
+        }, 300, function(){
+            $('.grupo ul').css('visibility', 'hidden');
+        });
+    });
+    
+    //console.log('animate');
+    //$('div#divfull').width(940);
 /*
 */
 });

@@ -114,5 +114,6 @@ urlpatterns = patterns('',
     url(r'^nosotros/$', 'main.views.nosotros'),
     url(r'^preguntas-frecuentes/$', 'main.views.preguntas_frecuentes'),
     url(r'^libro-reclamaciones/$', 'main.views.libro_reclamaciones'),
+    url(r'^nuestros-clientes/$', 'main.views.nuestros_clientes'),
     #url(r'^facebook_debug/', 'facebook-login.html', {'template':'facebook_debug.html'}), 
 )

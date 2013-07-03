@@ -189,7 +189,15 @@ class EmpresaChangeForm(ModelForm):
 			return ubigeo
 
 class EmpresaEmpleoForm(ModelForm):
-	ubigeo = UbigeoField(ubigeo=constant.ONLY_PERU)
+	ubigeo = UbigeoField() #ubigeo=constant.ONLY_PERU
+	extra_field_count = forms.CharField(max_length=255, widget=forms.HiddenInput())
+
+	def __init__(self, *args, **kwargs):
+		extra_fields = kwargs.pop('extra', 0)
+		super(EmpresaEmpleoForm, self).__init__(*args, **kwargs)
+		self.fields['extra_field_count'].initial = extra_fields
+		for index in range(extra_fields):
+			self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(max_length=255)
 
 	class Meta:
 		model = Empleo

@@ -3,12 +3,12 @@ from emailusernames.forms import EmailUserCreationForm
 from main.forms import BusquedaAvanzadaForm
 
 def globals(request):
-	areas = Area.objects.all() #[:15]
+	areas = Area.objects.all()[:10]
 	empleosareas = []
 	for item in Area.objects.all():
 		empleosareas.append({'id': item.id, 'ca_empleos': Empleo.objects.filter(area=item).count()})
 
-	empresas = Empresa.objects.all()[:15]
+	empresas = Empresa.objects.all()[:10]
 	empleosempresas = []
 	for item in Empresa.objects.all():
 		empleosempresas.append({'id': item.id,'ca_empleos': Empleo.objects.filter(user_id=item.user.id).count()})

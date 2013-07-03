@@ -3,6 +3,8 @@
 {% block empleos_destacados %}
 	<form id="form-crear" method="post" action=''>{% csrf_token %}
 		{{formulario.as_p}}
+		<hr>
+		<nav class="menus" id='add-another'><a href="#">Agregar Pregunta</a></nav>
 		<p><input type='submit' value='Agregar' /></p>
 	</form>
 {% endblock %}
