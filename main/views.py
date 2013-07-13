@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
-from main.models import Area, Empleo, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, PostulanteEmpresaEmpleo, MensajeDirecto, TipoEmpleo, PostulanteIdiomaNivel, Universidad, RecuperarPassword, PostulanteProgramaNivel, Carrera, Idioma, Programa
-from main.forms import PostulanteCreationCompleteForm, PostulanteChangeForm, PostulanteEstudioForm, PostulanteEmpleoForm, EmpresaCreationCompleteForm, EmpresaEmpleoForm, MensajeDirectoForm, PostulanteIdiomaNivelForm, PostulanteChangePasswordForm, RecuperarPasswordForm, PostulanteRecuperarPasswordForm, PostulanteProgramaNivelForm, EmpresaChangeForm, EmpresaNotificacionesForm, PostulanteNotificacionesForm, ValidarPasswordForm, BusquedaAvanzadaForm
+from main.models import Area, Empleo, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, PostulanteEmpresaEmpleo, MensajeDirecto, TipoEmpleo, PostulanteIdiomaNivel, Universidad, RecuperarPassword, PostulanteProgramaNivel, Carrera, Idioma, Programa, Pregunta, EmpleoPregunta, EmpleoPreguntaPostulante
+from main.forms import PostulanteCreationCompleteForm, PostulanteChangeForm, PostulanteEstudioForm, PostulanteEmpleoForm, EmpresaCreationCompleteForm, EmpresaEmpleoForm, MensajeDirectoForm, PostulanteIdiomaNivelForm, PostulanteChangePasswordForm, RecuperarPasswordForm, PostulanteRecuperarPasswordForm, PostulanteProgramaNivelForm, EmpresaChangeForm, EmpresaNotificacionesForm, PostulanteNotificacionesForm, ValidarPasswordForm, BusquedaAvanzadaForm, EmpresaPostularPreguntasForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -31,6 +31,7 @@ def getEp(request, empleo_id):
 			ee.append(item)
 	return ee
 
+# Principal
 def home(request):
 	#empleos = Empleo.objects.all().order_by('fe_creacion').reverse()[:10]
 	if request.user.groups.filter(pk=1).count() > 0:
@@ -71,7 +72,7 @@ def listar_empresas(request):
 	return render_to_response('list-empresas.html', locals(), context_instance=RequestContext(request))
 
 def listar_por_areas(request, id_area):
-	result = get_object_or_404(Area, pk=id_area)
+	result = get_object_or_404(Area, pk=id_area) # Devuelve el objeto o 404 en caso no exista
 	empleos = Empleo.objects.filter(area=result)
 	return render_to_response('list.html', locals(), context_instance=RequestContext(request))
 
@@ -110,6 +111,7 @@ def empresa_completar(request):
 			obj = formulario.save(commit=False)
 			obj.user = request.user
 			obj.save()
+			# Enviar correo
 			headers = ["from: Coopsol Empleos <no-responder@coopsolempleos.com>",
 			"subject: Bienvenido a Coopsol Empleos",
 			"to: " + obj.user.email,
@@ -171,6 +173,7 @@ def empresa_ingresar(request):
 			if user:
 				if user.is_active:
 					login(request, user)
+					request.session.set_expiry(7200) #dos Horas
 					return HttpResponseRedirect(request.session.get('next'))
 				else:
 					return HttpResponseRedirect('/usuario-inactivo')
@@ -218,6 +221,16 @@ def empresa_empleo_agregar(request):
 			obj = formulario.save(commit=False)
 			obj.user = request.user
 			obj.save()
+			#
+			for i in range(9):
+				objInput = "pregunta_%d" % (i+1)
+				if request.POST[objInput]:
+					objPregunta, created = Pregunta.objects.get_or_create(no_pregunta=request.POST[objInput])
+					EmpleoPregunta.objects.create(
+						empleo=obj,
+						pregunta=objPregunta
+					);
+			#
 			return HttpResponseRedirect('/empresa/empleo/mostrar')
 	else:
 		formulario = EmpresaEmpleoForm()
@@ -226,16 +239,28 @@ def empresa_empleo_agregar(request):
 @login_required(login_url='/empresa/ingresar')
 def empresa_empleo_editar(request, id_empleo):
 	empleo = Empleo.objects.get(pk=id_empleo)
+	objEmpleoPreguntas = EmpleoPregunta.objects.filter(empleo=empleo)
 	if request.method == 'POST':
-		formulario = EmpresaEmpleoForm(request.POST, instance=empleo)
+		formulario = EmpresaEmpleoForm(data=request.POST, instance=empleo, empleopreguntas=objEmpleoPreguntas)
 		if formulario.is_valid():
 			obj = formulario.save(commit=False)
 			obj.user = request.user
 			obj.fe_modificacion = datetime.now()
 			obj.save()
+			#
+			EmpleoPregunta.objects.filter(empleo=obj).delete()
+			for i in range(9):
+				objInput = "pregunta_%d" % (i+1)
+				if request.POST[objInput]:
+					objPregunta, created = Pregunta.objects.get_or_create(no_pregunta=request.POST[objInput])
+					EmpleoPregunta.objects.create(
+						empleo=obj,
+						pregunta=objPregunta
+					);
+			#
 			return HttpResponseRedirect('/empresa')
 	else:
-		formulario = EmpresaEmpleoForm(instance=empleo)
+		formulario = EmpresaEmpleoForm(instance=empleo, empleopreguntas=objEmpleoPreguntas)
 	return render_to_response('empresa-empleo-editar.html', locals(), context_instance=RequestContext(request))
 
 @login_required(login_url='/empresa/ingresar')
@@ -292,11 +317,46 @@ def empresa_postular_id(request, id_empleo):
 	user = request.user
 	existe = PostulanteEmpresaEmpleo.objects.filter(empleo=empleo, user=user)
 	if not existe:
-		PostulanteEmpresaEmpleo.objects.create(empleo=empleo, user=user)
-		return HttpResponseRedirect('/')
+		preguntas = EmpleoPregunta.objects.filter(empleo=empleo)
+		if not preguntas:
+			PostulanteEmpresaEmpleo.objects.create(empleo=empleo, user=user)
+			return HttpResponseRedirect('/')
+		else:
+			return HttpResponseRedirect('/empresa/postular/preguntas/%s' % id_empleo)
 	else:
 		postulando = True
 		return render_to_response('empresa-empleo-id.html', locals(), context_instance=RequestContext(request))
+
+def empresa_postular_preguntas_id(request, id_empleo):
+	objEmpleoPreguntas = EmpleoPregunta.objects.filter(empleo_id=id_empleo)
+	if request.method == 'POST':
+		formulario = EmpresaPostularPreguntasForm(data=request.POST, empleopreguntas=objEmpleoPreguntas)
+		if formulario.is_valid():
+			#
+			empleo = Empleo.objects.get(pk=id_empleo)
+			PostulanteEmpresaEmpleo.objects.create(empleo=empleo, user=request.user)
+			for i in range(9):
+				objInput = "pregunta_%d" % (i+1)
+				try:
+					rpta = request.POST[objInput]
+				except Exception:
+					rpta = None
+				if rpta:
+					objEmpleoPregunta = EmpleoPregunta.objects.get(empleo=empleo, pregunta__no_pregunta=formulario.fields[objInput].label)
+					EmpleoPreguntaPostulante.objects.create(
+						empleo_pregunta=objEmpleoPregunta,
+						postulante=request.user,
+						de_respuesta=rpta
+					)
+			return HttpResponseRedirect('/postulante')
+			#
+		formulario = EmpresaPostularPreguntasForm(data=request.POST, empleopreguntas=objEmpleoPreguntas)
+	else:
+		formulario = EmpresaPostularPreguntasForm(empleopreguntas=objEmpleoPreguntas)
+	return render_to_response('empresa-postular-preguntas-id.html', locals(), context_instance=RequestContext(request))
+
+def _log(request, de_error):
+	return render_to_response('log.html', locals(), context_instance=RequestContext(request))
 
 def empresa_notificaciones(request):
 	if request.method == 'POST':
@@ -540,6 +600,11 @@ def postulante_mostrar_id(request, id_postulante, id_empleo):
 		return None #HttpResponseRedirect('/postulante/completar')
 	else:
 		return render_to_response('postulante-mostrar.html', locals(), context_instance=RequestContext(request))
+
+@login_required(login_url='/empresa/ingresar')
+def postulante_empleo_preguntas(request, id_postulante, id_empleo):
+	objEmpleoPreguntaPostulante = EmpleoPreguntaPostulante.objects.filter(postulante_id=id_postulante, empleo_pregunta__empleo_id=id_empleo).order_by('id')
+	return render_to_response('postulante_empleo_preguntas.html', locals(), context_instance=RequestContext(request))
 
 def postulante_notificaciones(request):
 	if request.method == 'POST':
@@ -947,6 +1012,20 @@ def programa_json(request, name):
 	for programa in programas:
 		item = {
 			'name': programa.no_programa
+		}
+		list.append(item)
+	context = {
+		'data': list
+	}
+	return HttpResponse(json.dumps(context), mimetype="application/json")	
+
+def pregunta_json(request):
+	preguntas = Pregunta.objects.filter(no_pregunta__icontains=request.GET['name'])[:request.GET['maxRows']]
+	#preguntas = Pregunta.objects.All()
+	list = []
+	for pregunta in preguntas:
+		item = {
+			'name': pregunta.no_pregunta
 		}
 		list.append(item)
 	context = {

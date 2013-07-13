@@ -92,7 +92,7 @@ def get_empleoestado_pais():
 def get_default_tipoempleo():
     return TipoEmpleo.objects.get(pk=1)
 
-class Preguntas(models.Model):
+class Pregunta(models.Model):
 	no_pregunta = models.CharField(max_length=255, verbose_name='Pregunta')
 
 	def __unicode__(self):
@@ -136,6 +136,13 @@ class Empleo(models.Model):
 				return 'publicado hace %s meses' % (dias / 30)
 			else:
 				return 'publicado hace mas de %s meses' % (dias / 30)
+
+class EmpleoPregunta(models.Model):
+	empleo = models.ForeignKey(Empleo)
+	pregunta = models.ForeignKey(Pregunta)
+
+	class Meta:
+		ordering = ['id']
 
 class EstadoCivil(models.Model):
 	no_estado_civil = models.CharField(max_length=255, verbose_name='Estado Civil')
@@ -191,6 +198,11 @@ class Postulante(models.Model):
 		td = datetime.now() - datetime(self.fe_nacimiento.year, self.fe_nacimiento.month, self.fe_nacimiento.day)
 		dias = td.days
 		return dias / 365
+
+class EmpleoPreguntaPostulante(models.Model):
+	empleo_pregunta = models.ForeignKey(EmpleoPregunta)
+	postulante = models.ForeignKey(User)
+	de_respuesta = models.TextField(verbose_name='Respuesta')
 
 class PostulanteEmpresaEmpleo(models.Model):
 	empleo = models.ForeignKey(Empleo)

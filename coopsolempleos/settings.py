@@ -8,6 +8,7 @@ PATH_PROJECT = os.path.dirname(os.path.realpath(__file__))
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 EXTJS4_DEBUG = DEBUG
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 #SIMPLE_AUTOCOMPLETE_MODELS = ('',)
 #SIMPLE_AUTOCOMPLETE = {'Universidad': {'max_items': 10}}
@@ -15,7 +16,7 @@ EXTJS4_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
-    ('Jimbert Castillo M.', 'jcastillo@coopsol.com'),
+    ('Sistemas', 'jcastillo@coopsol.com'),
 )
 
 MANAGERS = ADMINS
@@ -26,7 +27,7 @@ DATABASES = {
         'NAME': 'coopsolempleos',                      # Or path to database file if using sqlite3.
         'USER': 'ce',                      # Not used with sqlite3.
         'PASSWORD': 'ce.++',                  # Not used with sqlite3.
-        'HOST': '192.168.0.2',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -145,7 +146,6 @@ INSTALLED_APPS = (
     #'captcha',
     #'extjs4',
     'django_facebook',
-    #'open_facebook'
     'djcelery',
 )
 

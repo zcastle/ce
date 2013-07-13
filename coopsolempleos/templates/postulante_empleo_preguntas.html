@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<h5><strong>Cuestionario</strong></h5>
+	<hr class="p">
+	{% for epp in objEmpleoPreguntaPostulante %}
+		<div class="empleos referencia-telefono"><strong>{{epp.empleo_pregunta.pregunta|upper}}</strong></div>
+		<div class="empleos referencia-telefono" style="margin-left: 10px;">{{epp.de_respuesta}}</div>
+	{% endfor %}
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

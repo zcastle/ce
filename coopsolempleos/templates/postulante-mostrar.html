@@ -5,6 +5,7 @@
 		{% if group.pk = 2 %}
 			<nav class="menu">
 				<a href="{% url main.views.mensaje_enviar postulante.user.pk request.id_empleo 0 %}">Enviar mensaje</a>
+				<a href="{% url main.views.postulante_empleo_preguntas postulante.user.pk request.id_empleo %}">Ver Cuestionario</a>
 			</nav>
 		{% endif %}
 	{% endfor %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block empleos_destacados %}
+	<form id="form-crear2" method="post" enctype='multipart/form-data' action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<p><input type='submit' value='Enviar informacion' /></p>
+	</form>
+{% endblock %}
+
+{% block registro_rapido %}{% endblock %}

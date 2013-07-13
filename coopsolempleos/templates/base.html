@@ -20,7 +20,7 @@
 	<link rel="stylesheet" href="{{STATIC_URL}}css/layout.css">
 	<link rel="stylesheet" href="{{STATIC_URL}}css/dj.css">
 	<!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css">-->
-	<link rel="stylesheet" href="{{STATIC_URL}}css/redmond/jquery-ui-1.10.0.custom.min.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/redmond/jquery-ui-1.10.3.custom.min.css">
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -30,9 +30,11 @@
 	<!--
 	<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+	jquery-1.9.0.js
+	jquery-ui-1.10.0.custom.js
 	-->
-	<script src="{{STATIC_URL}}js/jquery-1.9.0.js"></script>
-	<script src="{{STATIC_URL}}js/jquery-ui-1.10.0.custom.js"></script>
+	<script src="{{STATIC_URL}}js/jquery-1.10.2.min.js"></script>
+	<script src="{{STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js"></script>
 	<script src="{{STATIC_URL}}js/jquery.numeric.js"></script>
 
 	<!-- tinybox -->
@@ -103,12 +105,12 @@
 					{% else %}
 						{% for group in request.user.groups.all %}
 							{% if group.pk = 1 %}
-								<a href="{% url main.views.postulante_mostrar %}" class="lblUsuario">{{request.user.email}}</a>
+								<a href="{% url main.views.postulante_mostrar %}">{{request.user.email}}</a>
 							{% elif group.pk = 2 %}
 								{% if request.user.empresa.no_razon_social %}
-									<a href="{% url main.views.empresa_mostrar %}" class="lblUsuario">{{request.user.empresa.no_razon_social|title}}</a>
+									<a href="{% url main.views.empresa_mostrar %}">{{request.user.empresa.no_razon_social|title}}</a>
 								{% else %}
-									<a href="{% url main.views.empresa_mostrar %}" class="lblUsuario">{{request.user.email}}</a>
+									<a href="{% url main.views.empresa_mostrar %}">{{request.user.email}}</a>
 								{% endif %}
 							{% endif %}
 							{% if mensajesCount > 0 %}
@@ -137,7 +139,7 @@
 				{% include "block_criterios_opciones.html" %}
 			{% endfor %}
 
-			<div class="column resultados borde-redondo" id='divfull'>
+			<div class="column resultados borde-redondo divfull">
 				{% block empleos_destacados_titulo %}{% endblock %}
 				{% block empleos_destacados %}{% endblock %}
 				{% block empleos_destacados_total %}{% endblock %}

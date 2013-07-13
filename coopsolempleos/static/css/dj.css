@@ -31,9 +31,12 @@ form#form-crear p input[id='id_no_web'],
 form#form-crear p input[id='id_no_contacto'] {width: 400px;}
 
 form#form-crear p select[id='id_institucion'],
-form#form-crear p select[id='id_carrera'] {width: 410px; font-size: 1.2em;}
+form#form-crear p select[id='id_carrera'],
+.ancho_410 {width: 410px; font-size: 1.2em;}
 
 form#form-crear p textarea {height: 100px;}
+
+form#form-crear2 p input[type=text] {width: 680px;}
 
 form p input[type=submit] {float: right;}
 /*form#form-notificaciones p input[type=submit] {float: right;}*/

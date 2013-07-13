@@ -164,6 +164,7 @@ $(function() {
     });
 
     var _minLength = 3;
+    var _maxRow = 10;
 
     $('#id_institucion').autocomplete({
         source: function(request, response){
@@ -361,8 +362,34 @@ $(function() {
         });
     });
     
-    //console.log('animate');
-    //$('div#divfull').width(940);
+    var queryString = window.location.href;
+    //console.log(queryString);
+    if (queryString.match('terminos-condiciones') != null) {
+        $('div.divfull').width(940);
+    }
+
+    $('.pregunta').autocomplete({
+        source: function(request, response){
+            $.ajax({
+                url: "/pregunta-json/",
+                dataType: "json",
+                data:{
+                    maxRows: _maxRow,
+                    name: request.term
+                },
+                success: function(data){
+                    response($.map(data.data, function(item){
+                        return {
+                            label: item.name,
+                            value: item.name
+                        }
+                    }));
+                }
+            });
+        },
+        minLength: _minLength
+    });
 /*
+
 */
 });

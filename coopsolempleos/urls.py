@@ -49,6 +49,7 @@ urlpatterns = patterns('',
     url(r'^empresa/empleo/clonar/(?P<id_empleo>\d+)$', 'main.views.empresa_empleo_clonar'),
     url(r'^empresa/empleo/(?P<id_empleo>\d+)$', 'main.views.empresa_empleo_id'),
     url(r'^empresa/postular/(?P<id_empleo>\d+)$', 'main.views.empresa_postular_id'),
+    url(r'^empresa/postular/preguntas/(?P<id_empleo>\d+)$', 'main.views.empresa_postular_preguntas_id'),
     url(r'^empresa/notificaciones/$', 'main.views.empresa_notificaciones'),
     
     url(r'^postulante/$', 'main.views.postulante_mostrar'),
@@ -73,6 +74,8 @@ urlpatterns = patterns('',
     url(r'^postulante/programas/eliminar/(?P<id_programa>\d+)$', 'main.views.postulante_programas_eliminar'),
     url(r'^postulante/postulaciones/$', 'main.views.postulante_postulaciones'),
     url(r'^postulante/notificaciones/$', 'main.views.postulante_notificaciones'),
+    url(r'^postulante/empleo/cuestionario/(?P<id_postulante>\d+)/(?P<id_empleo>\d+)$', 'main.views.postulante_empleo_preguntas'),
+    
     
     url(r'^area/(?P<id_area>\d+)$', 'main.views.listar_por_areas'),
     url(r'^areas/$', 'main.views.listar_areas'),
@@ -96,11 +99,13 @@ urlpatterns = patterns('',
     url(r'^recuperar/error/(?P<email>.+)$', 'main.views.recuperar_error'),
 
     url(r'^404$', 'main.views._404'),
+    url(r'^log/(?P<de_error>.+)$', 'main.views._log'),
 
     url(r'^universidad-json/(?P<name>.+)$', 'main.views.universidad_json'),
     url(r'^carrera-json/(?P<name>.+)$', 'main.views.carrera_json'),
     url(r'^idioma-json/(?P<name>.+)$', 'main.views.idioma_json'),
     url(r'^programa-json/(?P<name>.+)$', 'main.views.programa_json'),
+    url(r'^pregunta-json/$', 'main.views.pregunta_json'),
 
     url(r'^usuario-inactivo/$', 'main.views.usuario_inactivo'),
     url(r'^usuario-no-existe/$', 'main.views.usuario_no_existe'),

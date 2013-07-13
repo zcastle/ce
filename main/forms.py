@@ -1,7 +1,7 @@
 #encoding:utf-8
 from django.forms import ModelForm, CharField, BooleanField, PasswordInput, HiddenInput, TextInput, Textarea
 from django import forms
-from main.models import Area, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, Empleo, MensajeDirecto, PostulanteIdiomaNivel, Universidad, Carrera, PostulanteProgramaNivel, Idioma, Programa
+from main.models import Area, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, Empleo, MensajeDirecto, PostulanteIdiomaNivel, Universidad, Carrera, PostulanteProgramaNivel, Idioma, Programa, EmpleoPregunta, EmpleoPreguntaPostulante
 from django.forms import extras
 from django.core.validators import validate_email
 from django.contrib.auth import authenticate
@@ -190,14 +190,33 @@ class EmpresaChangeForm(ModelForm):
 
 class EmpresaEmpleoForm(ModelForm):
 	ubigeo = UbigeoField() #ubigeo=constant.ONLY_PERU
-	extra_field_count = forms.CharField(max_length=255, widget=forms.HiddenInput())
+	#pregunta_1 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_1 = forms.CharField();
+	pregunta_2 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_3 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_4 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_5 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_6 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_7 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_8 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_9 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_10 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	#extra_field_count = forms.CharField(max_length=255, widget=forms.HiddenInput())
 
-	def __init__(self, *args, **kwargs):
-		extra_fields = kwargs.pop('extra', 0)
+	def __init__(self, empleopreguntas, *args, **kwargs):
 		super(EmpresaEmpleoForm, self).__init__(*args, **kwargs)
-		self.fields['extra_field_count'].initial = extra_fields
-		for index in range(extra_fields):
-			self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(max_length=255)
+		#empleopreguntas = kwargs.pop('empleopreguntas', None)
+		self.fields['pregunta_1'].widget.attrs['class'] = 'ancho_410 pregunta'
+		i=1
+		for empleopregunta in empleopreguntas:
+			self.fields['pregunta_%d'%i].initial = empleopregunta.pregunta
+			i+=1
+	#def __init__(self, *args, **kwargs):
+	#	extra_fields = kwargs.pop('extra', 0)
+	#	super(EmpresaEmpleoForm, self).__init__(*args, **kwargs)
+	#	self.fields['extra_field_count'].initial = extra_fields
+	#	for index in range(extra_fields):
+	#		self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(max_length=255)
 
 	class Meta:
 		model = Empleo
@@ -302,3 +321,19 @@ class BusquedaAvanzadaForm(forms.Form):
 	areas = forms.ChoiceField()
 	#text = forms.CharField(widget=HiddenInput(attrs={'name': 'tex_buscar'}))
 	#text = forms.HiddenInput()
+
+class EmpresaPostularPreguntasForm(forms.Form):
+
+	def __init__(self, empleopreguntas, *args, **kwargs):
+		super(EmpresaPostularPreguntasForm, self).__init__(*args, **kwargs)
+		#i=1
+		for i, empleopregunta in enumerate(empleopreguntas): # for i, question in enumerate(extra):
+			i+=1
+			self.fields['pregunta_%s'%i] = forms.CharField(label=empleopregunta.pregunta, max_length=255, required=True) #self.fields['fieldname_%s' % i] = forms.CharField(label=question)
+			self.fields['pregunta_%s'%i].widget.attrs['class'] = 'ancho_410'
+	#def __init__(self, *args, **kwargs):
+	#	extra_fields = kwargs.pop('extra', 0)
+	#	super(EmpresaEmpleoForm, self).__init__(*args, **kwargs)
+	#	self.fields['extra_field_count'].initial = extra_fields
+	#	for index in range(extra_fields):
+	#		self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(max_length=255)
