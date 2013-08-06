@@ -5,7 +5,7 @@
 import os
 PATH_PROJECT = os.path.dirname(os.path.realpath(__file__))
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 EXTJS4_DEBUG = DEBUG
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True

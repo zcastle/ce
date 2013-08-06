@@ -3,6 +3,10 @@
 {% block empleos_destacados %}
 	<h3>Libro de Reclamaciones</h3>
 	<hr>
+	<form id="form-libro-reclamaciones" method="post" enctype='multipart/form-data' action=''>{% csrf_token %}
+		{{formulario.as_p}}
+		<p><input type='submit' value='Enviar' /></p>
+	</form>
 {% endblock %}
 
 {% block registro_rapido %}{% endblock %}

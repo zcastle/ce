@@ -1,7 +1,7 @@
 #encoding:utf-8
 from django.forms import ModelForm, CharField, BooleanField, PasswordInput, HiddenInput, TextInput, Textarea
 from django import forms
-from main.models import Area, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, Empleo, MensajeDirecto, PostulanteIdiomaNivel, Universidad, Carrera, PostulanteProgramaNivel, Idioma, Programa, EmpleoPregunta, EmpleoPreguntaPostulante
+from main.models import Area, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, Empleo, MensajeDirecto, PostulanteIdiomaNivel, Universidad, Carrera, PostulanteProgramaNivel, Idioma, Programa, EmpleoPregunta, EmpleoPreguntaPostulante, LibroReclamaciones
 from django.forms import extras
 from django.core.validators import validate_email
 from django.contrib.auth import authenticate
@@ -188,6 +188,36 @@ class EmpresaChangeForm(ModelForm):
 		else:
 			return ubigeo
 
+class EmpresaEmpleoForm0(ModelForm):
+	ubigeo = UbigeoField() #ubigeo=constant.ONLY_PERU
+	#pregunta_1 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_1 = forms.CharField();
+	pregunta_2 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_3 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_4 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_5 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_6 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_7 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_8 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_9 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	pregunta_10 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
+	#extra_field_count = forms.CharField(max_length=255, widget=forms.HiddenInput())
+
+	def __init__(self, *args, **kwargs):
+		super(EmpresaEmpleoForm0, self).__init__(*args, **kwargs)
+		self.fields['pregunta_1'].widget.attrs['class'] = 'ancho_410 pregunta'
+
+	class Meta:
+		model = Empleo
+		exclude = ('user')
+
+	def clean_ubigeo(self):
+			ubigeo = self.cleaned_data['ubigeo']
+			if not ubigeo:
+				raise forms.ValidationError("El ubigeo no puede ser vacio")
+			else:
+				return ubigeo
+
 class EmpresaEmpleoForm(ModelForm):
 	ubigeo = UbigeoField() #ubigeo=constant.ONLY_PERU
 	#pregunta_1 = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'ancho_410 pregunta'}), required=False)
@@ -337,3 +367,23 @@ class EmpresaPostularPreguntasForm(forms.Form):
 	#	self.fields['extra_field_count'].initial = extra_fields
 	#	for index in range(extra_fields):
 	#		self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(max_length=255)
+
+class LibroReclamacionesForm(ModelForm):
+	#RADIO_CHOICES = (
+    #    ('none', "No Textbox"),
+    #    ('one', "One Textbox: "),
+    #)
+    #tipo_persona = forms.ChoiceField(widget=forms.RadioSelect(),choices=RADIO_CHOICES)
+	ubigeo = UbigeoField()
+
+	class Meta:
+		model = LibroReclamaciones
+		widgets = {
+            'yes_or_no': forms.RadioSelect
+        }
+	def clean_ubigeo(self):
+		ubigeo = self.cleaned_data.get("ubigeo")
+		if ubigeo is None:
+			raise forms.ValidationError("Este campo es obligatorio.")
+		else:
+			return ubigeo

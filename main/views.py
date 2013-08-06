@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from main.models import Area, Empleo, Empresa, Postulante, PostulanteEstudio, PostulanteEmpleo, PostulanteEmpresaEmpleo, MensajeDirecto, TipoEmpleo, PostulanteIdiomaNivel, Universidad, RecuperarPassword, PostulanteProgramaNivel, Carrera, Idioma, Programa, Pregunta, EmpleoPregunta, EmpleoPreguntaPostulante
-from main.forms import PostulanteCreationCompleteForm, PostulanteChangeForm, PostulanteEstudioForm, PostulanteEmpleoForm, EmpresaCreationCompleteForm, EmpresaEmpleoForm, MensajeDirectoForm, PostulanteIdiomaNivelForm, PostulanteChangePasswordForm, RecuperarPasswordForm, PostulanteRecuperarPasswordForm, PostulanteProgramaNivelForm, EmpresaChangeForm, EmpresaNotificacionesForm, PostulanteNotificacionesForm, ValidarPasswordForm, BusquedaAvanzadaForm, EmpresaPostularPreguntasForm
+from main.forms import PostulanteCreationCompleteForm, PostulanteChangeForm, PostulanteEstudioForm, PostulanteEmpleoForm, EmpresaCreationCompleteForm, EmpresaEmpleoForm, MensajeDirectoForm, PostulanteIdiomaNivelForm, PostulanteChangePasswordForm, RecuperarPasswordForm, PostulanteRecuperarPasswordForm, PostulanteProgramaNivelForm, EmpresaChangeForm, EmpresaNotificacionesForm, PostulanteNotificacionesForm, ValidarPasswordForm, BusquedaAvanzadaForm, EmpresaPostularPreguntasForm, LibroReclamacionesForm, EmpresaEmpleoForm0
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -189,16 +189,19 @@ def empresa_ingresar(request):
 
 @login_required(login_url='/empresa/ingresar')
 def empresa_mostrar(request):
-	empresa = Empresa.objects.filter(user=request.user)
-	empleos = Empleo.objects.filter(user=request.user).order_by('-fe_creacion').order_by('-pk')[:5]
-	empleospostulantes = []
-	for item in empleos:
-		empleospostulantes.append({'id': item.pk, 'ca_postulantes': PostulanteEmpresaEmpleo.objects.filter(empleo=item).count()})
+	if request.user.is_active:
+		empresa = Empresa.objects.filter(user=request.user)
+		empleos = Empleo.objects.filter(user=request.user).order_by('-fe_creacion').order_by('-pk')[:5]
+		empleospostulantes = []
+		for item in empleos:
+			empleospostulantes.append({'id': item.pk, 'ca_postulantes': PostulanteEmpresaEmpleo.objects.filter(empleo=item).count()})
 
-	if not empresa:
-		return HttpResponseRedirect('/empresa/completar')
+		if not empresa:
+			return HttpResponseRedirect('/empresa/completar')
+		else:
+			return render_to_response('empresa-mostrar.html', locals(), context_instance=RequestContext(request))
 	else:
-		return render_to_response('empresa-mostrar.html', locals(), context_instance=RequestContext(request))
+		return render_to_response('empresa-no-activa.html', locals(), context_instance=RequestContext(request))
 
 def empresa_mostrar_id(request, id_empresa):
 	empresa = get_object_or_404(Empresa, pk=id_empresa)
@@ -216,7 +219,7 @@ def empresa_mostrar_id(request, id_empresa):
 #request.POST['email']
 def empresa_empleo_agregar(request):
 	if request.method == 'POST':
-		formulario = EmpresaEmpleoForm(request.POST)
+		formulario = EmpresaEmpleoForm0(request.POST)
 		if formulario.is_valid():
 			obj = formulario.save(commit=False)
 			obj.user = request.user
@@ -233,7 +236,7 @@ def empresa_empleo_agregar(request):
 			#
 			return HttpResponseRedirect('/empresa/empleo/mostrar')
 	else:
-		formulario = EmpresaEmpleoForm()
+		formulario = EmpresaEmpleoForm0()
 	return render_to_response('empresa-empleo-agregar.html', locals(), context_instance=RequestContext(request))
 
 @login_required(login_url='/empresa/ingresar')
@@ -1129,7 +1132,18 @@ def preguntas_frecuentes(request):
 	return render_to_response('preguntas-frecuentes.html', context_instance=RequestContext(request))
 
 def libro_reclamaciones(request):
-	return render_to_response('libro-reclamaciones.html', context_instance=RequestContext(request))
+	if request.method == 'POST':
+		formulario = LibroReclamacionesForm(request.POST)
+		if formulario.is_valid():
+			obj = formulario.save(commit=False)
+			obj.save()
+			return HttpResponseRedirect('/')
+		else:
+			return render_to_response('libro-reclamaciones.html', locals(), context_instance=RequestContext(request))
+	else:
+		formulario = LibroReclamacionesForm()
+	return render_to_response('libro-reclamaciones.html', locals(), context_instance=RequestContext(request))
 
 def nuestros_clientes(request):
 	return render_to_response('nuestros-clientes.html', context_instance=RequestContext(request))
+	

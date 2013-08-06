@@ -303,6 +303,25 @@ class PostulanteProgramaNivel(models.Model):
 	def __unicode__(self):
 		return '%s - %s' % (self.programa, self.nivel)
 
+BOOL_CHOICES = ((True, 'Reclamo'), (False, 'Queja'))
+
+class LibroReclamaciones(models.Model):
+	fe_creacion = models.DateTimeField(auto_now=True)
+	#tipo_persona = models.SmallIntegerField(verbose_name='')
+	no_persona = models.CharField(max_length=255, verbose_name='Nombres')
+	ap_persona = models.CharField(max_length=255, verbose_name='Apellidos')
+	nu_dni_persona = models.CharField(max_length=11, verbose_name='DNI')
+	nu_fijo = models.CharField(max_length=100, verbose_name='Telefono Fijo')
+	nu_movil = models.CharField(max_length=100, verbose_name='Telefono Movil', blank=True)
+	de_email = models.CharField(max_length=255, verbose_name='Correo Electrónico')
+	de_direccion = models.CharField(max_length=255, verbose_name='Dirección')
+	ubigeo = models.ForeignKey(Ubigeo)
+	tipo_reclamo = models.BooleanField(default=True, choices=BOOL_CHOICES, verbose_name='Tipo de Reclamo')
+	#de_servicio = models.TextField(verbose_name='Descripcion del')
+	de_reclamo = models.TextField(verbose_name='Descripcion del Reclamo o Queja')
+	#BooleanField
+
+
 #class MyFbCustomProfile(FacebookProfileModel):
 #    user = models.OneToOneField('auth.User')
 
@@ -315,12 +334,12 @@ class PostulanteProgramaNivel(models.Model):
 #		instance.groups.add(Group.objects.get(pk=1)) #Postulante
 		#MyFbCustomProfile.objects.create(user=instance)
 
-def add_group(sender, instance, created, **kwargs):
-	if created:
-		g = instance.groups.all().count()
+#def add_group(sender, instance, created, **kwargs):
+#	if created:
+#		g = instance.groups.all().count()
 		#fb = FacebookProfile.objects.filter(user=instance)
-		if g == 0:
-			instance.groups.add(Group.objects.get(pk=1))
-			instance.save()
+#		if g == 0:
+#			instance.groups.add(Group.objects.get(pk=1))
+#			instance.save()
 
-post_save.connect(add_group, sender=User)
+#post_save.connect(add_group, sender=User)

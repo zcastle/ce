@@ -38,6 +38,10 @@ form#form-crear p textarea {height: 100px;}
 
 form#form-crear2 p input[type=text] {width: 680px;}
 
+form#form-libro-reclamaciones p label {position: relative; float: left; width: 160px;}
+form#form-libro-reclamaciones p input[type=text] {width: 530px;}
+form#form-libro-reclamaciones p textarea {width: 530px;}
+
 form p input[type=submit] {float: right;}
 /*form#form-notificaciones p input[type=submit] {float: right;}*/
 

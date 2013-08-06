@@ -292,7 +292,6 @@ $(function() {
         texto = texto.substring(0, texto.length-3)
         console.log(texto);
         v.val(this.value);*/
-        
     });
 
     $('#btnBusquedaAvanzada').click(function(){
